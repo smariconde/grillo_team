@@ -44,13 +44,16 @@ def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
+def precio(update, context):
+    """Responde algo segun la variable que se le ponga"""
+    update.message.reply_text("Te doy el precio rey")
 
 def main():
     """Start the bot."""
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater("1559027662:AAEB6rExcjRSTpKgyCO_J1uW5tqswGQKNvQ", use_context=True)
+    updater = Updater("1532055309:AAF3K0fZnnlz9MuLZG3_50LtSxw1oen5eh4", use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -58,6 +61,7 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("precio", precio))
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
