@@ -22,7 +22,14 @@ sheet2 = client.open("Acciones con Google Finance").worksheet("Plan")
 
 # Utilidad: (fila, columna)
 # Variables de lo que se pide
-rendimiento = sheet.cell(8, 25).value
-ganancia = sheet.cell(8, 23).value
+def quiena():
+    rendimiento = sheet.cell(8, 25).value
+    ganancia = sheet.cell(8, 23).value
+    if float(ganancia) < 0:
+        mensaje = f"Perdiendo U$S {ganancia}, con un rendimiento del {rendimiento}"
+    else:
+        mensaje = f"Ganando U$S {ganancia}, con un rendimiento del {rendimiento}"
+    return mensaje
+
 fila = sheet2.row_values(9)
-print(fila)
+#print(fila)

@@ -11,9 +11,8 @@ Basic Echobot example, repeats messages.
 Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
-
+import googlesheets
 import logging
-
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 # Enable logging
@@ -32,7 +31,8 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
+    update.message.reply_text('''Escribir mensaje para saber información sobre:\n
+                            - Quiena''')
 
 
 def echo(update, context):
@@ -44,9 +44,10 @@ def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
-def precio(update, context):
-    """Responde algo segun la variable que se le ponga"""
-    update.message.reply_text("Te doy el precio rey")
+def quiena(update, context):
+    """Responde el porcentaje del rendimiento"""
+    update.message.reply_text(googlesheets.quiena())
+
 
 def main():
     """Start the bot."""
@@ -61,10 +62,11 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("precio", precio))
 
     # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text, echo))
+    #dp.add_handler(MessageHandler(Filters.text, echo))
+    dp.add_handler(MessageHandler(Filters.regex('^([Qq]uiena)$'), quiena))
+    #dp.add_handler(MessageHandler(Filters.regex('^([Ee]stado|[Gg]anancia)$'), p_l))
 
     # log all errors
     dp.add_error_handler(error)
