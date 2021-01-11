@@ -22,14 +22,32 @@ sheet2 = client.open("Acciones con Google Finance").worksheet("Plan")
 
 # Utilidad: (fila, columna)
 # Variables de lo que se pide
-def quiena():
+def info():
     rendimiento = sheet.cell(8, 25).value
     ganancia = sheet.cell(8, 23).value
     if float(ganancia) < 0:
-        mensaje = f"Perdiendo U$S {ganancia}, con un rendimiento del {rendimiento}"
+        mensaje = f"Quiena:\nPerdiendo U$S {ganancia}\nRendimiento del {rendimiento}"
     else:
-        mensaje = f"Ganando U$S {ganancia}, con un rendimiento del {rendimiento}"
-    return mensaje
+        mensaje = f"Quiena:\nGanando U$S {ganancia}\nRendimiento del {rendimiento}"
+    
+    datos = sheet.col_values(29)
+    datos2 = sheet.col_values(30)
+    mensaje2 = mensaje + f"\n\nBecerra:\nGeneral: {datos[5]}, {datos[7]}\nAcciones:\nDólares: {datos[10]}, Pesos: {datos2[10]}\n\nEcoValores:\nDólares: {datos[-1]}, Pesos: {datos2[-1]}"
 
-fila = sheet2.row_values(9)
-#print(fila)
+    return mensaje2
+
+def plan():
+    hoja = sheet2.get_all_values()
+    text = ""
+    for i in range(6):
+        try:
+            acciones = hoja[6+i][1]
+            precio = hoja[6+i][2]
+            target = hoja[6+i][7]
+            stop = hoja[6+i][8]
+            even = hoja[6+i][10]
+            dias = hoja[6+i][-1]
+            text += f"-----{acciones}-----\n💸 Precio: ${precio}\n🎯 Target: {target}\n📉 Stop Loss: {stop}\n🧨 SL Even: {even}\n🗓 Total de dias: {dias}\n\n"
+        except:
+            break
+    return text

@@ -31,8 +31,11 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('''Escribir mensaje para saber información sobre:\n
-                            - Quiena''')
+    update.message.reply_text(
+        '''Escribir mensaje para saber información de trades:
+        - Info
+        '''
+        )
 
 
 def echo(update, context):
@@ -44,10 +47,14 @@ def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
-def quiena(update, context):
+def info(update, context):
     """Responde el porcentaje del rendimiento"""
-    update.message.reply_text(googlesheets.quiena())
+    update.message.reply_text("➰ Working on it... puede tardar unos segundos")
+    update.message.reply_text(googlesheets.info())
 
+def plan(update, context):
+    update.message.reply_text("➰ Working on it... puede tardar unos segundos")
+    update.message.reply_text(googlesheets.plan())
 
 def main():
     """Start the bot."""
@@ -65,7 +72,8 @@ def main():
 
     # on noncommand i.e message - echo the message on Telegram
     #dp.add_handler(MessageHandler(Filters.text, echo))
-    dp.add_handler(MessageHandler(Filters.regex('^([Qq]uiena)$'), quiena))
+    dp.add_handler(MessageHandler(Filters.regex('^([Ii]nfo|[Tt]rades)$'), info))
+    dp.add_handler(MessageHandler(Filters.regex('^([Pp]lan|[Ss]top)$'), plan))
     #dp.add_handler(MessageHandler(Filters.regex('^([Ee]stado|[Gg]anancia)$'), p_l))
 
     # log all errors
