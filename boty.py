@@ -11,7 +11,7 @@ Basic Echobot example, repeats messages.
 Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
-import googlesheets
+import googlesheets, scraper
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
@@ -26,15 +26,17 @@ logger = logging.getLogger(__name__)
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
+    update.message.reply_text('Hola! El bot está operativo')
 
 
 def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text(
-        '''Escribir mensaje para saber información de trades:
-        - Info
-        '''
+    '''Este bot te responde con información del Dashboard de Google Sheets:
+    - /info - Información sobre la situación actual de los trades
+    - /plan - Datos de la planificación de los trades
+    - /dolar - Te da la cotización del dólar en los distintos formatos
+    '''
         )
 
 
@@ -47,14 +49,21 @@ def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
+
 def info(update, context):
     """Responde el porcentaje del rendimiento"""
     update.message.reply_text("➰ Working on it... puede tardar unos segundos")
     update.message.reply_text(googlesheets.info())
 
+
 def plan(update, context):
     update.message.reply_text("➰ Working on it... puede tardar unos segundos")
     update.message.reply_text(googlesheets.plan())
+
+
+def dolar(update, context):
+    update.message.reply_text("➰ Working on it... puede tardar unos segundos")
+    update.message.reply_text(scraper.dolar())    
 
 def main():
     """Start the bot."""
@@ -69,12 +78,14 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("info", info))
+    dp.add_handler(CommandHandler("plan", plan))
+    dp.add_handler(CommandHandler("dolar", dolar))
 
     # on noncommand i.e message - echo the message on Telegram
-    #dp.add_handler(MessageHandler(Filters.text, echo))
-    dp.add_handler(MessageHandler(Filters.regex('^([Ii]nfo|[Tt]rades)$'), info))
-    dp.add_handler(MessageHandler(Filters.regex('^([Pp]lan|[Ss]top)$'), plan))
-    #dp.add_handler(MessageHandler(Filters.regex('^([Ee]stado|[Gg]anancia)$'), p_l))
+    dp.add_handler(MessageHandler(Filters.text, echo))
+    #dp.add_handler(MessageHandler(Filters.regex('^([Ii]nfo|[Tt]rades)$'), info))
+    #dp.add_handler(MessageHandler(Filters.regex('^([Pp]lan|[Ss]top)$'), plan))
 
     # log all errors
     dp.add_error_handler(error)

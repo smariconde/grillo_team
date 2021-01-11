@@ -41,13 +41,13 @@ def plan():
     text = ""
     for i in range(6):
         try:
-            acciones = hoja[6+i][1]
+            accion = hoja[6+i][1]
             precio = hoja[6+i][2]
             target = hoja[6+i][7]
             stop = hoja[6+i][8]
             even = hoja[6+i][10]
             dias = hoja[6+i][-1]
-            text += f"-----{acciones}-----\n💸 Precio: ${precio}\n🎯 Target: {target}\n📉 Stop Loss: {stop}\n🧨 SL Even: {even}\n🗓 Total de dias: {dias}\n\n"
+            text += f"-----{accion}-----\n💸 Precio: ${precio}\n🎯 Target: {target}\n📉 Stop Loss: {stop}\n🧨 SL Even: {even}\n🗓 Total de dias: {dias}\n\n"
         except:
             break
     return text
