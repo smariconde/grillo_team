@@ -16,7 +16,8 @@ import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 # Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+logging.basicConfig(filename="boty.log",
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
@@ -61,6 +62,11 @@ def plan(update, context):
     update.message.reply_text(googlesheets.plan())
 
 
+def performance(update, context):
+    update.message.reply_text("➰ Working on it... puede tardar unos segundos")
+    update.message.reply_text(googlesheets.performance()) 
+
+
 def dolar(update, context):
     update.message.reply_text("➰ Working on it... puede tardar unos segundos")
     update.message.reply_text(scraper.dolar())    
@@ -80,6 +86,7 @@ def main():
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("info", info))
     dp.add_handler(CommandHandler("plan", plan))
+    dp.add_handler(CommandHandler("performance", performance))
     dp.add_handler(CommandHandler("dolar", dolar))
 
     # on noncommand i.e message - echo the message on Telegram

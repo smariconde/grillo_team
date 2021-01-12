@@ -9,8 +9,9 @@ client = gspread.authorize(creds)
 
 # Find a workbook by name and open the first sheet
 # Make sure you use the right name here.
-sheet = client.open("Acciones con Google Finance").sheet1
-sheet2 = client.open("Acciones con Google Finance").worksheet("Plan")
+
+
+
 
 # Extract and print all of the values
 #list_of_hashes = sheet.get_all_records()
@@ -23,6 +24,7 @@ sheet2 = client.open("Acciones con Google Finance").worksheet("Plan")
 # Utilidad: (fila, columna)
 # Variables de lo que se pide
 def info():
+    sheet = client.open("Acciones con Google Finance").sheet1
     rendimiento = sheet.cell(8, 25).value
     ganancia = sheet.cell(8, 23).value
     if float(ganancia) < 0:
@@ -37,6 +39,7 @@ def info():
     return mensaje2
 
 def plan():
+    sheet2 = client.open("Acciones con Google Finance").worksheet("Plan")
     hoja = sheet2.get_all_values()
     text = ""
     for i in range(6):
@@ -50,4 +53,15 @@ def plan():
             text += f"-----{accion}-----\n💸 Precio: ${precio}\n🎯 Target: {target}\n📉 Stop Loss: {stop}\n🧨 SL Even: {even}\n🗓 Total de dias: {dias}\n\n"
         except:
             break
+    return text
+
+def performance():
+    sheet3 = client.open("Acciones con Google Finance").worksheet("Performance")
+    datos = sheet3.get_all_records()
+    tickers = [[dic["Symbol"], dic["Day Gain"], dic["Total Gain"], dic["Gain %"]] for dic in datos[1:] if dic["Total Gain"] != 0]
+
+    text = ""
+    for i in tickers:
+        text += f"------| {i[0]} |------\nDay Gain: {i[1]}\nTotal Gain: {i[2]}\nGain %: {i[3]}\n\n"
+
     return text
