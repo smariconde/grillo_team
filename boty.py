@@ -11,9 +11,12 @@ Basic Echobot example, repeats messages.
 Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
-import googlesheets, scraper
+import googlesheets, scraper, telegram
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from iex_api import Chart
+from config import TELEGRAM_TOKEN
+
 
 # Enable logging
 logging.basicConfig(filename="boty.log",
@@ -43,7 +46,14 @@ def help(update, context):
 
 def echo(update, context):
     """Echo the user message."""
-    update.message.reply_text(update.message.text)
+    bot = telegram.Bot(token=TELEGRAM_TOKEN)
+    symbol = update.message.text.upper()
+    grafico = Chart(symbol).chart()
+    if grafico is False:
+        update.message.reply_text("⚠️ - No es un símbolo válido -")
+    else:
+        update.message.reply_text("➰ Working on it... puede tardar unos segundos")
+        bot.send_photo(chat_id=update.message.chat_id, photo=open('chart.png', 'rb'), caption= symbol)
 
 
 def error(update, context):
@@ -76,7 +86,7 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater("1532055309:AAF3K0fZnnlz9MuLZG3_50LtSxw1oen5eh4", use_context=True)
+    updater = Updater(TELEGRAM_TOKEN, use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -92,7 +102,6 @@ def main():
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
     #dp.add_handler(MessageHandler(Filters.regex('^([Ii]nfo|[Tt]rades)$'), info))
-    #dp.add_handler(MessageHandler(Filters.regex('^([Pp]lan|[Ss]top)$'), plan))
 
     # log all errors
     dp.add_error_handler(error)

@@ -3,3 +3,4 @@ yfinance
 python-telegram-bot
 oauth2client
 gspread
+mplfinance
