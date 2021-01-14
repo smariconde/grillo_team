@@ -26,6 +26,8 @@ class Chart():
         params = {'chartIEXOnly':'True','chartInterval': '1', 'token' : token}
         try:
             data = requests.get(url, params=params).json()
+            df = pd.DataFrame(data)
+            df.minute = pd.to_datetime(df.minute)
         except:
             return False
 
