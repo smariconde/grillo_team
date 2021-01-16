@@ -79,5 +79,3 @@ class Symbol():
                     scale_width_adjustment=dict(volume=0.7,candle=1.45),
                     update_width_config=dict(candle_linewidth=1.2),
                     block=False)
-
-print(Symbol("TSLA").quote())
