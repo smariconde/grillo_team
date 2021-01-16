@@ -54,7 +54,7 @@ def echo(update, context):
     if grafico is False:
         update.message.reply_text("⚠️ - No es un símbolo válido -")
     else:
-        caption = ticker.getQuote()
+        caption = ticker.quote()
         bot.send_photo(chat_id=update.message.chat_id, photo=open('chart.png', 'rb'), caption= caption)
 
 

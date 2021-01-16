@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 import mplfinance as mpf
 import tda_api
+import iex_api
 
 
 class Symbol():
@@ -9,9 +10,6 @@ class Symbol():
 
     def __init__(self, symbol):
         self.symbol = symbol
-        self.close = float
-        self.change = float
-        self.pct_change = float
 
     def _addMACD(self, data, slow=26, fast=12, suavizado=9):
         df = data.copy()
@@ -40,16 +38,20 @@ class Symbol():
         
         return df
 
-    def getQuote(self):
-        quotes = tda_api.quote(self.symbol)
-        self.close = quotes[0]
-        self.change = quotes[1]
-        self.pct_change = round(quotes[2], 2)
-        if self.pct_change > 0:
-            caption = f'📈 {self.symbol} ${self.close} {self.change}\n🔼 {self.pct_change}%'
+    def quote(self):
+        quotes = iex_api.getQuote(self.symbol)
+
+        if quotes['pct_change'] > 0:
+            caption = f"{self.symbol} - {quotes['name']} 📈\n${quotes['last_price']} {quotes['change']} ({quotes['pct_change']}% ▲)"
         else:
-            caption = f'📉 {self.symbol} ${self.close} {self.change}\n🔽 {self.pct_change}%'
-        
+            caption = f"{self.symbol} - {quotes['name']} 📉\n${quotes['last_price']} {quotes['change']} ({quotes['pct_change']}% ▼)"
+        if quotes['market'] is False:
+            caption += f"\nExtended Hours\n${quotes['ext_last_price']} {quotes['ext_change']} "
+            if quotes['ext_pct_change'] > 0:
+                caption += f"({quotes['ext_pct_change']}% ▲)"
+            else:
+                caption += f"({quotes['ext_pct_change']}% ▼)"
+        caption += f"\nMarket Cap: {quotes['marketCap']}, P/E: {quotes['peRatio']}\nRelative Volume: {quotes['relVolume']}\n52 Week High: {quotes['w52high']}\n52 Week Low: {quotes['w52low']}"
         return caption
 
     def chart(self):
@@ -78,3 +80,4 @@ class Symbol():
                     update_width_config=dict(candle_linewidth=1.2),
                     block=False)
 
+print(Symbol("TSLA").quote())
