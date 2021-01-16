@@ -14,7 +14,7 @@ bot.
 import googlesheets, scraper, telegram
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from iex_api import Chart
+from symbol import Symbol
 from config import TELEGRAM_TOKEN
 
 
@@ -46,14 +46,16 @@ def help(update, context):
 
 def echo(update, context):
     """Echo the user message."""
+    update.message.reply_text("➰ Working on it... puede tardar unos segundos")
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     symbol = update.message.text.upper()
-    grafico = Chart(symbol).chart()
+    ticker = Symbol(symbol)
+    grafico = ticker.chart()
     if grafico is False:
         update.message.reply_text("⚠️ - No es un símbolo válido -")
     else:
-        update.message.reply_text("➰ Working on it... puede tardar unos segundos")
-        bot.send_photo(chat_id=update.message.chat_id, photo=open('chart.png', 'rb'), caption= symbol)
+        caption = ticker.getQuote()
+        bot.send_photo(chat_id=update.message.chat_id, photo=open('chart.png', 'rb'), caption= caption)
 
 
 def error(update, context):
