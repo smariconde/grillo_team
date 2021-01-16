@@ -12,10 +12,10 @@ def getQuote(symbol):
     market = r['isUSMarketOpen']
     last_price = r['latestPrice']
     change = r['change']
-    pct_change = r['changePercent'] * 100
+    pct_change = round(r['changePercent'] * 100, 2)
     ext_last_price = r['extendedPrice']
     ext_change = r['extendedChange']
-    ext_pct_change = r['extendedChangePercent'] * 100
+    ext_pct_change = round(r['extendedChangePercent'] * 100, 2)
     marketCap = round(r['marketCap'] / 10**9, 2)
     peRatio = r['peRatio']
     relVolume = round(r['avgTotalVolume'] / r['volume'], 2)

@@ -51,7 +51,7 @@ class Symbol():
                 caption += f"({quotes['ext_pct_change']}% ▲)"
             else:
                 caption += f"({quotes['ext_pct_change']}% ▼)"
-        caption += f"\nMarket Cap: {quotes['marketCap']}, P/E: {quotes['peRatio']}\nRelative Volume: {quotes['relVolume']}\n52 Week High: {quotes['w52high']}\n52 Week Low: {quotes['w52low']}"
+        caption += f"\nMarket Cap: {quotes['marketCap']}B, P/E: {quotes['peRatio']}\nRelative Volume: {quotes['relVolume']}\n52 Week High: ${quotes['w52high']}\n52 Week Low: ${quotes['w52low']}"
         return caption
 
     def chart(self):
