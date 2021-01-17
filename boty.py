@@ -30,17 +30,19 @@ logger = logging.getLogger(__name__)
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    update.message.reply_text('Hola! El bot está operativo')
+    update.message.reply_text('Hola! El bot está operativo.\n\nEste bot devuelve información financiera de un ticker que se le pase por mensaje.')
 
 
 def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text(
-    '''Este bot te responde con información del Dashboard de Google Sheets:
-    - /info - Información sobre la situación actual de los trades
-    - /plan - Datos de la planificación de los trades
-    - /dolar - Te da la cotización del dólar en los distintos formatos
-    '''
+'''Ecribir un Ticker y el bot devolverá:
+
+- Gráfico anual con indicadores como EMA 20, SMA 50, SMA 200, Volumen y MACD.
+- Datos básicos sobre el precio y el volumen.
+
+Se puede consultar el precio del dólar mediante /dolar
+'''
         )
 
 

@@ -32,7 +32,7 @@ class Symbol():
         df['ema_20'] = df.close.ewm(span=20).mean()
         df['sma_50'] = df.close.rolling(50).mean()
         df['sma_200'] = df.close.rolling(200).mean()
-        df['vol_avg'] = df.volume.rolling(100).mean()
+        df['vol_avg'] = df.volume.rolling(20).mean()
         df = df.dropna().round(4)
         df = df.iloc[55:]
         
@@ -51,7 +51,7 @@ class Symbol():
                 caption += f"({quotes['ext_pct_change']}% ▲)"
             else:
                 caption += f"({quotes['ext_pct_change']}% ▼)"
-        caption += f"\nMarket Cap: {quotes['marketCap']}B, P/E: {quotes['peRatio']}\nRelative Volume: {quotes['relVolume']}\n52 Week High: ${quotes['w52high']}\n52 Week Low: ${quotes['w52low']}"
+        caption += f"\n\nP/E: {quotes['peRatio']}\nMarket Cap: {quotes['marketCap']}B\nRelative Volume: {quotes['relVolume']}\n52 Week High: ${quotes['w52high']}\n52 Week Low: ${quotes['w52low']}"
         return caption
 
     def chart(self):
@@ -72,10 +72,12 @@ class Symbol():
                     ylabel='',
                     ylabel_lower='',
                     figratio= (30,15),
-                    figscale = 2,
+                    figscale = 1.5,
                     panel_ratios = (6,1,2),
                     tight_layout= True,
                     volume_panel=1,
-                    scale_width_adjustment=dict(volume=0.7,candle=1.45),
+                    scale_width_adjustment=dict(volume=0.7,candle=1.2),
                     update_width_config=dict(candle_linewidth=1.2),
-                    block=False)
+                    block=False,
+                    datetime_format='%b %Y',
+                    xrotation=0)
