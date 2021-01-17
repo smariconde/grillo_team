@@ -33,10 +33,10 @@ class Symbol():
         df['sma_50'] = df.close.rolling(50).mean()
         df['sma_200'] = df.close.rolling(200).mean()
         df['vol_avg'] = df.volume.rolling(20).mean()
-        df = df.dropna().round(4)
+        df.dropna(inplace=True, thresh=2)
         df = df.iloc[55:]
         
-        return df
+        return df.round(4)
 
     def quote(self):
         quotes = iex_api.getQuote(self.symbol)
