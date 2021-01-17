@@ -31,9 +31,12 @@ class Symbol():
         self._addMACD(df)
         df['ema_20'] = df.close.ewm(span=20).mean()
         df['sma_50'] = df.close.rolling(50).mean()
-        df['sma_200'] = df.close.rolling(200).mean()
+        if len(df.index) > 200:
+            df['sma_200'] = df.close.rolling(200).mean()
+        else:
+            df['sma_200'] = 0
         df['vol_avg'] = df.volume.rolling(20).mean()
-        df.dropna(inplace=True, thresh=2)
+        df.dropna(inplace=True)
         df = df.iloc[55:]
         
         return df.round(4)
