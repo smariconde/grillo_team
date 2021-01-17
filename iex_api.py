@@ -1,10 +1,13 @@
 import requests
+import pandas as pd
 from config import IEX_TOKEN
 from pprint import pprint
 
+url_base = 'https://cloud.iexapis.com/v1'
+
 def getQuote(symbol):
 
-    url = f"https://cloud.iexapis.com/v1/stock/{symbol}/quote?"
+    url = url_base + f"/stock/{symbol}/quote?"
     params = {'token' : IEX_TOKEN}
 
     r = requests.get(url, params=params).json()
@@ -39,3 +42,13 @@ def getQuote(symbol):
     }
 
     return new_dict
+
+def getNews(symbol, last = 1):
+    url = url_base + f"/stock/{symbol}/news/last/{last}?"
+    params = {'token' : IEX_TOKEN}
+
+    r = requests.get(url, params=params).json()
+    df = pd.DataFrame(r)
+    df['fecha'] = pd.to_datetime(df.datetime, unit = 'ms').dt.strftime('%d %b %-H:%M')
+    
+    return df['fecha'][0], df['url'][0]

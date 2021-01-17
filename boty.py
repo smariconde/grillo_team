@@ -78,7 +78,14 @@ def plan(update, context):
 
 def performance(update, context):
     update.message.reply_text("➰ Working on it... puede tardar unos segundos")
-    update.message.reply_text(googlesheets.performance()) 
+    performances = googlesheets.performance()
+    update.message.reply_text(performances[0])
+    lista_tickers = performances[1]
+    update.message.reply_text("📰 Buscando Noticias...")
+    for ticker in lista_tickers:
+        news = Symbol(ticker).news()
+        update.message.reply_text(news, parse_mode="HTML")
+        
 
 
 def dolar(update, context):
