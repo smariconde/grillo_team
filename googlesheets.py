@@ -49,6 +49,6 @@ def performance():
     text = ""
     lista_tickers = []
     for i in tickers:
-        text += f"------| {i[0]} |------\nDay: {i[1]} ({i[2]})\nTrade: {i[3]} ({i[4]})\n\n"
+        text += f"-------- <b>{i[0]}</b> --------\n<b>Day</b>    {i[1]} ({i[2]})\n<b>Trade</b> {i[3]} ({i[4]})\n\n"
         lista_tickers.append(i[0])
     return text, lista_tickers
