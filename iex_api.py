@@ -1,7 +1,6 @@
 import requests
 import pandas as pd
 from config import IEX_TOKEN
-from pprint import pprint
 
 url_base = 'https://cloud.iexapis.com/v1'
 
@@ -18,10 +17,14 @@ def getQuote(symbol):
     pct_change = round(r['changePercent'] * 100, 2)
     ext_last_price = r['extendedPrice']
     ext_change = r['extendedChange']
-    ext_pct_change = round(r['extendedChangePercent'] * 100, 2)
+    try:
+        ext_pct_change = round(r['extendedChangePercent'] * 100, 2)
+        relVolume = round(r['avgTotalVolume'] / r['volume'], 2)
+    except:
+        ext_pct_change = 0
+        relVolume = 0
     marketCap = round(r['marketCap'] / 10**9, 2)
     peRatio = r['peRatio']
-    relVolume = round(r['avgTotalVolume'] / r['volume'], 2)
     w52high = r['week52High']
     w52low = r['week52Low']
 
