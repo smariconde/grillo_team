@@ -55,7 +55,7 @@ def echo(update, context):
     grafico = ticker.chart()
     if grafico is False:
         update.message.reply_text("⚠️ - No es un símbolo válido -")
-    elif grafico is None:
+    elif grafico == 0:
         caption = ticker.quote()
         update.message.reply_text(f"⚠️ - Error con el gráfico -\n{caption}")
     else:

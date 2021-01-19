@@ -84,11 +84,9 @@ class Symbol():
                         datetime_format='%b %Y',
                         xrotation=0)
             except:
-                return None
+                return 0
 
     def news(self):
         news = iex_api.getNews(self.symbol)
         caption = f'<a href="{news[1]}"><b>{self.symbol}</b>\n{news[0]}</a>'
         return caption
-
-Symbol("AMD").chart()
