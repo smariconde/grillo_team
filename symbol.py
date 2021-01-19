@@ -1,9 +1,7 @@
 import pandas as pd
-import requests
 import mplfinance as mpf
-import tda_api
-import iex_api
-
+import tda_api, iex_api, finanzas_sql
+import requests
 
 class Symbol():
     """Crea un gráfico del ticker que se le pase y lo devuelve como .png"""
@@ -43,6 +41,7 @@ class Symbol():
 
     def quote(self):
         quotes = iex_api.getQuote(self.symbol)
+        earnings = finanzas_sql.getEarningsDate(self.symbol)[0]
 
         if quotes['pct_change'] > 0:
             caption = f"{self.symbol} - {quotes['name']} 📈\n${quotes['last_price']} {quotes['change']} ({quotes['pct_change']}% ▲)"
@@ -54,7 +53,7 @@ class Symbol():
                 caption += f"({quotes['ext_pct_change']}% ▲)"
             else:
                 caption += f"({quotes['ext_pct_change']}% ▼)"
-        caption += f"\n\nP/E: {quotes['peRatio']}\nMarket Cap: {quotes['marketCap']}B\nRelative Volume: {quotes['relVolume']}\n52 Week High: ${quotes['w52high']}\n52 Week Low: ${quotes['w52low']}"
+        caption += f"\n\nEarnings Date: {earnings}\nP/E: {quotes['peRatio']}\nMarket Cap: {quotes['marketCap']}B\nRelative Volume: {quotes['relVolume']}\n52 Week High: ${quotes['w52high']}\n52 Week Low: ${quotes['w52low']}"
         return caption
 
     def chart(self):
@@ -62,30 +61,34 @@ class Symbol():
         if df is False:
             return False
         else:
-            ap2 = [ mpf.make_addplot(df.vol_avg,panel=1,color='grey',secondary_y=True),
-                    mpf.make_addplot(df.ema_20,panel=0,color='pink',secondary_y=False),
-                    mpf.make_addplot(df.sma_50,panel=0,color='orange',secondary_y=False),
-                    mpf.make_addplot(df.sma_200,panel=0,color='grey',secondary_y=False),
-                    mpf.make_addplot(df.macd,panel=2,color='fuchsia',secondary_y=True),
-                    mpf.make_addplot(df.signal,panel=2,color='b',secondary_y=True),
-                    mpf.make_addplot(df.histograma,panel=2,type='bar',width=0.7,color='dimgray',alpha=0.5,secondary_y=False) ]
+            try:
+                ap2 = [ mpf.make_addplot(df.ema_20,panel=0,color='pink',secondary_y=False),
+                        mpf.make_addplot(df.sma_50,panel=0,color='orange',secondary_y=False),
+                        mpf.make_addplot(df.sma_200,panel=0,color='grey',secondary_y=False),
+                        mpf.make_addplot(df.macd,panel=2,color='fuchsia',secondary_y=True),
+                        mpf.make_addplot(df.signal,panel=2,color='b',secondary_y=True),
+                        mpf.make_addplot(df.histograma,panel=2,type='bar',width=0.7,color='dimgray',alpha=0.5,secondary_y=False) ]
 
-            mpf.plot(df, type = 'candle', style = 'yahoo', volume=True,savefig='chart.png',addplot=ap2,
-                    title=str(self.symbol),
-                    ylabel='',
-                    ylabel_lower='',
-                    figratio= (30,15),
-                    figscale = 1.5,
-                    panel_ratios = (6,1,2),
-                    tight_layout= True,
-                    volume_panel=1,
-                    scale_width_adjustment=dict(volume=0.7,candle=1.2),
-                    update_width_config=dict(candle_linewidth=1.2),
-                    block=False,
-                    datetime_format='%b %Y',
-                    xrotation=0)
+                mpf.plot(df, type = 'candle', style = 'yahoo', volume=True,savefig='chart.png',addplot=ap2,
+                        title=str(self.symbol),
+                        ylabel='Daily',
+                        ylabel_lower='',
+                        figratio= (30,15),
+                        figscale = 1.5,
+                        panel_ratios = (6,1,2),
+                        tight_layout= True,
+                        volume_panel=1,
+                        scale_width_adjustment=dict(volume=0.7,candle=1.2),
+                        update_width_config=dict(candle_linewidth=1.2),
+                        block=False,
+                        datetime_format='%b %Y',
+                        xrotation=0)
+            except:
+                return None
 
     def news(self):
         news = iex_api.getNews(self.symbol)
         caption = f'<a href="{news[1]}"><b>{self.symbol}</b>\n{news[0]}</a>'
         return caption
+
+Symbol("AMD").chart()
