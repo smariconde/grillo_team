@@ -57,10 +57,13 @@ def echo(update, context):
         update.message.reply_text("⚠️ - No es un símbolo válido -")
     elif grafico == 0:
         caption = ticker.quote()
-        update.message.reply_text(f"⚠️ - Error con el gráfico -\n{caption}")
+        update.message.reply_text(f"⚠️ - Error con el gráfico, probablemente por cantidad de datos menores a un año -\n{caption}")
     else:
         caption = ticker.quote()
         bot.send_photo(chat_id=update.message.chat_id, photo=open('chart.png', 'rb'), caption= caption)
+        update.message.reply_text("📰 Buscando última noticia...")
+        news = Symbol(ticker).news()
+        update.message.reply_text(news, parse_mode="HTML")
 
 
 def error(update, context):
@@ -108,9 +111,9 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("info", info))
-    dp.add_handler(CommandHandler("plan", plan))
-    dp.add_handler(CommandHandler("performance", performance))
+    # dp.add_handler(CommandHandler("info", info))
+    # dp.add_handler(CommandHandler("plan", plan))
+    # dp.add_handler(CommandHandler("performance", performance))
     dp.add_handler(CommandHandler("dolar", dolar))
 
     # on noncommand i.e message - echo the message on Telegram

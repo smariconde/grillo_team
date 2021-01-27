@@ -1,10 +1,9 @@
 import pandas as pd
 import mplfinance as mpf
-import tda_api, iex_api, finanzas_sql
+import tda_api, iex_api, finanzas_sql, yf_api
 import requests
 
 class Symbol():
-    """Crea un gráfico del ticker que se le pase y lo devuelve como .png"""
 
     def __init__(self, symbol):
         self.symbol = symbol
@@ -22,7 +21,7 @@ class Symbol():
 
     def _data(self):
         try:
-            df = tda_api.priceHistory(self.symbol, period=2)
+            df = yf_api.getHistory(self.symbol)
         except:
             return False
 
@@ -41,7 +40,7 @@ class Symbol():
 
     def quote(self):
         quotes = iex_api.getQuote(self.symbol)
-        earnings = finanzas_sql.getEarningsDate(self.symbol)[0]
+        earnings = yf_api.getEarnings(self.symbol)
 
         if quotes['pct_change'] > 0:
             caption = f"{self.symbol} - {quotes['name']} 📈\n${quotes['last_price']} {quotes['change']} ({quotes['pct_change']}% ▲)"
