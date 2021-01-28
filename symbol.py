@@ -34,7 +34,8 @@ class Symbol():
             df['sma_200'] = 0
         df['vol_avg'] = df.volume.rolling(20).mean()
         df.dropna(inplace=True)
-        df = df.iloc[55:]
+        if len(df.index) > 200:
+            df = df.iloc[55:]
         
         return df.round(4)
 
@@ -89,5 +90,3 @@ class Symbol():
         news = iex_api.getNews(self.symbol)
         caption = f'<a href="{news[1]}"><b>{self.symbol}</b>\n{news[0]}</a>'
         return caption
-
-        
