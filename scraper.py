@@ -1,6 +1,5 @@
 import pandas as pd
 import requests
-from bs4 import BeautifulSoup
 
 def dolar():
     agents = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) '
