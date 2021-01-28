@@ -89,3 +89,5 @@ class Symbol():
         news = iex_api.getNews(self.symbol)
         caption = f'<a href="{news[1]}"><b>{self.symbol}</b>\n{news[0]}</a>'
         return caption
+
+        

@@ -62,7 +62,7 @@ def echo(update, context):
         caption = ticker.quote()
         bot.send_photo(chat_id=update.message.chat_id, photo=open('chart.png', 'rb'), caption= caption)
         update.message.reply_text("📰 Buscando última noticia...")
-        news = Symbol(ticker).news()
+        news = ticker.news()
         update.message.reply_text(news, parse_mode="HTML")
 
 
